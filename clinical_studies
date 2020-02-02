@@ -1,0 +1,46 @@
+library(tidyverse)
+library(epitools)
+
+
+lind <- data.frame(
+  group = c(rep('cyder', 2), rep('elixir_vitriol', 2), rep('vinegar', 2),
+            rep('sea_water', 2), rep('control', 2), rep('lemon_orange', 2)),
+  outcome = c(rep('not_improvement', 10), rep('improvement', 2))
+)
+
+tab_lind <- table(lind$group, lind$outcome)
+chisq.test(tab_lind, correct = FALSE)
+riskratio(tab_lind)
+
+
+ggplot(lind, aes(group, fill = outcome))+
+  geom_bar(position = 'fill')+
+  coord_flip()+
+  scale_fill_manual(values = c('blue', 'red'))
+
+stre <- data.frame(
+  group = c(rep('streptomycin', 55), rep('control', 52)),
+  outcome = c(rep('improvement', 38), rep('deterioration', 17), rep('improvement', 17), rep('deterioration', 35)),
+  death = c(rep('alive', 51), rep('death', 4), rep('alive', 38), rep('death', 14))
+)
+
+stre$outcome <- factor(stre$outcome, levels = c('improvement','deterioration'))
+
+dim(stre)
+
+death <- table(stre$group, stre$death)
+chisq.test(death, correct = FALSE)
+riskratio(death)
+
+outcome <- table(stre$group, stre$outcome)
+chisq.test(outcome, correct = FALSE)
+riskratio(outcome)
+
+
+ggplot(stre, aes(group, fill = outcome))+
+  geom_bar(position = 'fill')+
+  scale_fill_manual(values = c('blue', 'red'))
+
+ggplot(stre, aes(group, fill = death))+
+  geom_bar(position = 'fill')+
+  scale_fill_manual(values = c('blue', 'red'))
